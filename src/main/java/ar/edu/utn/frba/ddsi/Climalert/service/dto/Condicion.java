@@ -1,4 +1,4 @@
-package ar.edu.utn.ba.ddsi.Climalert.service.dto;
+package ar.edu.utn.frba.ddsi.Climalert.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

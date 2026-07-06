@@ -1,4 +1,4 @@
-package ar.edu.utn.ba.ddsi.Climalert.service.dto;
+package ar.edu.utn.frba.ddsi.Climalert.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -10,11 +10,11 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Localizacion {
-  private String name;
-  private String region;
-  private String country;
-  private LocalTime localTime;
+public class TemperaturaActual {
+  private Double temp_c;
+  private Integer humidity;
+  private Integer cloud;
+  private Condicion condition;
+  private String last_updated;
 
 }
-

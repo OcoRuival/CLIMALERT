@@ -1,4 +1,4 @@
-package ar.edu.utn.ba.ddsi.Climalert.enums;
+package ar.edu.utn.frba.ddsi.Climalert.enums;
 
 public enum Direccion {
   NORTE,
