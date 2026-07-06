@@ -38,7 +38,7 @@ public class ClimalertService {
         .fromUriString(properties.getUrl())
         .path("/current.json")
         .queryParam("key", properties.getKey())
-        .queryParam("q", "CABA")
+        .queryParam("q", "Buenos Aires")
         .build()
         .toUri();
 
