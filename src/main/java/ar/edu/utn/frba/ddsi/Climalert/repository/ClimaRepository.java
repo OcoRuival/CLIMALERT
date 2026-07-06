@@ -5,5 +5,6 @@ import java.util.Optional;
 
 public interface ClimaRepository{
 
-  Optional<ClimaEntity> buscarPorFechaDeRegistro();
+  ClimaEntity save(ClimaEntity clima);
+  Optional<ClimaEntity> obtenerUltimoRegistro();
 }
