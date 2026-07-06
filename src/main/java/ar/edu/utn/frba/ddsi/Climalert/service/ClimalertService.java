@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.ddsi.Climalert.service;
 
 import ar.edu.utn.frba.ddsi.Climalert.config.ClimalertProperties;
-import ar.edu.utn.frba.ddsi.Climalert.model.ClimaEntity;
+import ar.edu.utn.frba.ddsi.Climalert.model.Clima;
 import ar.edu.utn.frba.ddsi.Climalert.repository.ClimaRepository;
 import ar.edu.utn.frba.ddsi.Climalert.service.dto.ClimaActualDTO;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -18,18 +18,18 @@ import java.time.LocalDateTime;
 @Component
 public class ClimalertService {
 
-  private RestTemplate restTemplate;
+  private RestTemplate template;
   private ClimalertProperties properties;
-  private ClimaRepository climaRepository;
+  private ClimaRepository repositorio;
   //Usar un mailsender es poco extensible a futuro, pero en la consigna deja claro que se utiliza mail como medio
   //tampoco se nombra mucho de que a futuro puedan llegar a cambiar, ni que buscan expandirlo, por lo que no considero que sea un problema
-  private final JavaMailSender mailSender;
+  private final JavaMailSender enviadorDeMails;
 
-  public ClimalertService(RestTemplate restTemplate, ClimalertProperties properties, ClimaRepository climaRepository, JavaMailSender mailSender) {
-    this.restTemplate = restTemplate;
+  public ClimalertService(RestTemplate template, ClimalertProperties properties, ClimaRepository repositorio, JavaMailSender enviadorDeMails) {
+    this.template = template;
     this.properties = properties;
-    this.climaRepository = climaRepository;
-    this.mailSender = mailSender;
+    this.repositorio = repositorio;
+    this.enviadorDeMails = enviadorDeMails;
   }
 
   @Scheduled(fixedDelay = 300000)
@@ -43,23 +43,23 @@ public class ClimalertService {
         .toUri();
 
 
-      ClimaActualDTO respuesta = restTemplate.getForObject(uri, ClimaActualDTO.class);
+      ClimaActualDTO respuesta = template.getForObject(uri, ClimaActualDTO.class);
 
       if (respuesta != null) {
-        ClimaEntity entidad = new ClimaEntity();
+        Clima entidad = new Clima();
         entidad.setFechaRegistro(LocalDateTime.now());
         entidad.setLocalidad(respuesta.getLocation().getName());
         entidad.setTemperatura(respuesta.getCurrent().getTemp_c());
         entidad.setHumedad(respuesta.getCurrent().getHumidity());
 
-        climaRepository.save(entidad);
+        repositorio.guardar(entidad);
       }
 
   }
 
   @Scheduled(fixedDelay = 60000)
   public void procesar(){
-    climaRepository.obtenerUltimoRegistro().ifPresent(ultimoClima -> {
+    repositorio.obtenerUltimoRegistro().ifPresent(ultimoClima -> {
 
       boolean temperaturaCritica = ultimoClima.getTemperatura() > 35.0;
       boolean humedadCritica = ultimoClima.getHumedad() > 60;
@@ -71,7 +71,7 @@ public class ClimalertService {
   }
 
 
-  public void notificar(ClimaEntity clima){
+  public void notificar(Clima clima){
     String[] destinatarios = {"admin@clima.com", "emergencias@clima.com", "meteorologia@clima.com"};
 
     SimpleMailMessage mensaje = new SimpleMailMessage();
@@ -86,13 +86,9 @@ public class ClimalertService {
             "- Fecha de registro: %s",
         clima.getLocalidad(), clima.getTemperatura(), clima.getHumedad(), clima.getFechaRegistro()
     ));
+      enviadorDeMails.send(mensaje);
 
-    try {
-      mailSender.send(mensaje);
-      System.out.println("Correos de alerta enviados correctamente.");
-    } catch (Exception e) {
-      System.err.println("Error enviando correos (verifica la configuracion de SMTP). " + e.getMessage());
-    }
+
   }
   }
 

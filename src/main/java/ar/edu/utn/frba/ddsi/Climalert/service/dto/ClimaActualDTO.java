@@ -8,17 +8,17 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClimaActualDTO {
-  private static Localizacion location;
-  private static TemperaturaActual current;
+  private Localizacion location;
+  private TemperaturaActual current;
 
   public ClimaActualDTO() {
   }
 //ME TIRA ERROR EL SERVICE Y NO SE VA POR ESO PONGO GETTERS, RARO
-  public static Localizacion getLocation() {
+  public Localizacion getLocation() {
     return location;
   }
 
-  public static TemperaturaActual getCurrent(){
+  public TemperaturaActual getCurrent(){
     return current;
   }
 }

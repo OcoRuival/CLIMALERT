@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 
 @Data
-public class ClimaEntity {
+public class Clima {
   private Long id;
 
   private LocalDateTime fechaRegistro;

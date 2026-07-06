@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.ddsi.Climalert.repository;
 
-import ar.edu.utn.frba.ddsi.Climalert.model.ClimaEntity;
+import ar.edu.utn.frba.ddsi.Climalert.model.Clima;
 import ar.edu.utn.frba.ddsi.Climalert.utils.GeneradorIdSecuencial;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
@@ -11,12 +11,12 @@ import java.util.Optional;
 @Repository
 public class InMemoryClimaRepository implements ClimaRepository{
 
-  private GeneradorIdSecuencial generador;
-  private final List<ClimaEntity> climas = new ArrayList<>();
+  private final GeneradorIdSecuencial generador = new GeneradorIdSecuencial();
+  private final List<Clima> climas = new ArrayList<>();
 
 
   @Override
-  public ClimaEntity save(ClimaEntity clima) {
+  public Clima guardar(Clima clima) {
     if (clima.getId() == null) {
       clima.setId(generador.siguiente());
     }
@@ -25,13 +25,13 @@ public class InMemoryClimaRepository implements ClimaRepository{
   }
 
   @Override
-  public Optional<ClimaEntity> obtenerUltimoRegistro() {
+  public Optional<Clima> obtenerUltimoRegistro() {
     if (climas.isEmpty()) {
       return Optional.empty();
     }
 
     return climas.stream()
-        .max(Comparator.comparing(ClimaEntity::getFechaRegistro));
+        .max(Comparator.comparing(Clima::getFechaRegistro));
   }
   }
 

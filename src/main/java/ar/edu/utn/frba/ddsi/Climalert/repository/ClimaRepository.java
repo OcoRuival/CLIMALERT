@@ -1,10 +1,10 @@
 package ar.edu.utn.frba.ddsi.Climalert.repository;
 
-import ar.edu.utn.frba.ddsi.Climalert.model.ClimaEntity;
+import ar.edu.utn.frba.ddsi.Climalert.model.Clima;
 import java.util.Optional;
 
 public interface ClimaRepository{
 
-  ClimaEntity save(ClimaEntity clima);
-  Optional<ClimaEntity> obtenerUltimoRegistro();
+  Clima guardar(Clima clima);
+  Optional<Clima> obtenerUltimoRegistro();
 }
